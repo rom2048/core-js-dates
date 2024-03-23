@@ -162,8 +162,9 @@ function formatDate(date) {
  * 1, 2024 => 8
  */
 function getCountWeekendsInMonth(month, year) {
-  return Array.from({ length: new Date(year, month, 0).getDate() }, (_, day) =>
-    new Date(year, month - 1, day + 1).getDay()
+  return Array.from(
+    { length: new Date(year, month, 0).getUTCDate() },
+    (_, day) => new Date(year, month - 1, day + 1).getDay()
   ).filter((day) => day === 0 || day === 6).length;
 }
 
