@@ -162,9 +162,8 @@ function formatDate(date) {
  * 1, 2024 => 8
  */
 function getCountWeekendsInMonth(month, year) {
-  return Array.from(
-    { length: new Date(year, month, 0).getUTCDate() },
-    (_, day) => new Date(year, month - 1, day + 1).getDay()
+  return Array.from({ length: new Date(year, month, 0).getDate() }, (_, day) =>
+    new Date(year, month - 1, day + 1).getDay()
   ).filter((day) => day === 0 || day === 6).length;
 }
 
@@ -219,7 +218,7 @@ function getNextFridayThe13th(date) {
  * Date(2024, 10, 10) => 4
  */
 function getQuarter(date) {
-  return Math.ceil((date.getUTCMonth() + 1) / 3);
+  return Math.ceil((date.getMonth() + 1) / 3);
 }
 
 /**
@@ -240,9 +239,27 @@ function getQuarter(date) {
  * { start: '01-01-2024', end: '15-01-2024' }, 1, 3 => ['01-01-2024', '05-01-2024', '09-01-2024', '13-01-2024']
  * { start: '01-01-2024', end: '10-01-2024' }, 1, 1 => ['01-01-2024', '03-01-2024', '05-01-2024', '07-01-2024', '09-01-2024']
  */
-function getWorkSchedule(/* period, countWorkDays, countOffDays */) {
-  throw new Error('Not implemented');
+function getWorkSchedule(period, countWorkDays, countOffDays) {
+  const { start: startOrig, end: endOrig } = period;
+  const [startDay, startMonth, startYear] = startOrig.split('-').map(Number);
+  const [endDay, endMonth, endYear] = endOrig.split('-').map(Number);
+  const start = new Date(Date.UTC(startYear, startMonth - 1, startDay));
+  const end = new Date(Date.UTC(endYear, endMonth - 1, endDay));
+  const arr = [];
+  const currentDay = start;
+  while (currentDay <= end) {
+    for (let i = 0; i < countWorkDays && currentDay <= end; i += 1) {
+      arr.push(currentDay.toISOString());
+      currentDay.setDate(currentDay.getDate() + 1);
+    }
+    for (let i = 0; i < countOffDays && currentDay <= end; i += 1) {
+      currentDay.setDate(currentDay.getDate() + 1);
+    }
+  }
+  return arr.map((day) => day.split('T')[0].split('-').reverse().join('-'));
 }
+
+getWorkSchedule({ start: '01-01-2024', end: '15-01-2024' }, 1, 3);
 
 /**
  * Determines whether the year in the provided date is a leap year.
