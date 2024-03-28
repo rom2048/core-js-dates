@@ -259,8 +259,6 @@ function getWorkSchedule(period, countWorkDays, countOffDays) {
   return arr.map((day) => day.split('T')[0].split('-').reverse().join('-'));
 }
 
-getWorkSchedule({ start: '01-01-2024', end: '15-01-2024' }, 1, 3);
-
 /**
  * Determines whether the year in the provided date is a leap year.
  * A leap year is a year divisible by 4, but not by 100, unless it is also divisible by 400.
