@@ -18,7 +18,7 @@
  * '04 Dec 1995 00:12:00 UTC' => 818035920000
  */
 function dateToTimestamp(date) {
-  return new Date(date).getTime();
+  return Date.parse(date);
 }
 
 /**
@@ -32,7 +32,7 @@ function dateToTimestamp(date) {
  * Date(2015, 10, 20, 23, 15, 1) => '23:15:01'
  */
 function getTime(date) {
-  return new Date(date).toLocaleTimeString();
+  return date.toLocaleTimeString();
 }
 
 /**
